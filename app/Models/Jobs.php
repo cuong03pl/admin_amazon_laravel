@@ -12,6 +12,7 @@ class Jobs extends Model
         'username',
         'package_name',
         'data',
-        'date'
+        'date',
+        'status'
     ];
 }

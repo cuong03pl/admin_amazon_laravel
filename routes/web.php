@@ -5,6 +5,7 @@ use App\Http\Controllers\JobsController;
 use App\Http\Controllers\JobsUserController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,8 +32,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-Route::get('/create-account', [AccountController::class, 'create'])->name('create-account');
-Route::post('/create-account', [AccountController::class, 'store'])->name('create-account');
+Route::get('/user/index', [UserController::class, 'index'])->name('user.index');
+Route::get('/user/create-account', [UserController::class, 'create'])->name('user.create-account');
+Route::post('/user/create-account', [UserController::class, 'store'])->name('user.create-account');
+Route::delete('/user/{id}/delete', [UserController::class, 'delete'])->name('user.delete');
+
 
 Route::get('/products/index', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
@@ -53,4 +57,5 @@ Route::delete('/jobs/{id}/delete', [JobsController::class, 'delete'])->name('job
 Route::get('/jobs-user/index', [JobsUserController::class, 'index'])->name('jobs-user.index');
 Route::get('/jobs-user/{id}/show', [JobsUserController::class, 'show'])->name('jobs-user.show');
 Route::get('/jobs-user/{id}/edit', [JobsUserController::class, 'edit'])->name('jobs-user.edit');
+Route::post('/jobs-user/update', [JobsUserController::class, 'update'])->name('jobs-user.update');
 require __DIR__ . '/auth.php';

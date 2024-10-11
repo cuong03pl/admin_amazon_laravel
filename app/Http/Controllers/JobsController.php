@@ -13,6 +13,19 @@ class JobsController extends Controller
     public function index(): View
     {
         $jobs = Jobs::all();
+        foreach ($jobs as $job) {
+            $status = 2;
+            $package_name = $job->package_name;
+            $products = Product::where('package', $package_name)->get();
+            foreach ($products as $product) {
+                $description = $product->description;
+                if (strlen($description) < 500) {
+                    $status = 1;
+                    break;
+                }
+            }
+            $job->update(['status' => $status]);
+        }
         return view('jobs.index', compact("jobs"));
     }
 
@@ -23,8 +36,6 @@ class JobsController extends Controller
     }
     public function store(Request $request)
     {
-        $job = Jobs::create($request->all());
-
         $package = $request->input('package_name');
         $data = $request->input('data');
 
@@ -32,7 +43,8 @@ class JobsController extends Controller
 
         $products = explode("\n", $data);
         foreach ($products as $product) {
-            list($sku, $name, $description) = explode('|', $product);
+            list($sku, $name, $description, $image) = explode('|', $product);
+            // dd($sku, $name, $description, $image);
             if (Product::where('sku', $sku)->exists()) {
                 continue;
             }
@@ -41,13 +53,14 @@ class JobsController extends Controller
                     'sku' => $sku,
                     'name' => $name,
                     'description' => $description,
-                    'package' => $package
+                    'package' => $package,
+                    'image' => $image,
                 ]);
             } catch (\Exception $e) {
                 dd($e->getMessage());
             }
         }
-
+        $job = Jobs::create($request->all());
         return $this->index();
     }
 
@@ -55,7 +68,9 @@ class JobsController extends Controller
     public function edit($id): View
     {
         $job = Jobs::findOrFail($id);
-        return view("jobs.edit", compact("job"));
+        $user = User::where('email', $job->username)->get()->toArray();
+        $users = User::all();
+        return view("jobs.edit", compact("job", 'user', 'users'));
     }
 
     public function update(Request $request)

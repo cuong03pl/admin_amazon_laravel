@@ -31,7 +31,6 @@ class ProductController extends Controller
         $request->validate([
             'description' => 'required|string',
             'name' => 'required|string',
-            'tags' => 'required|string',
             'sku' => 'required|string'
         ]);
 
@@ -39,11 +38,13 @@ class ProductController extends Controller
         $name = $request->input('name');
         $tags = $request->input('tags');
         $sku = $request->input('sku');
+        $image = $request->input('image');
         Product::create([
             'name' => $name,
             'description' => json_encode($description),
             'tags' => $tags,
-            'sku' => $sku
+            'sku' => $sku,
+            'image' => $image,
         ]);
 
         return $this->index();
@@ -62,7 +63,6 @@ class ProductController extends Controller
         $request->validate([
             'description' => 'required|string',
             'name' => 'required|string',
-            'tags' => 'required|string',
             'sku' => 'required|string'
         ]);
 
@@ -70,11 +70,13 @@ class ProductController extends Controller
         $name = $request->input('name');
         $tags = $request->input('tags');
         $sku = $request->input('sku');
+        $image = $request->input('image');
         $product->update([
             'name' => $name,
             'description' => json_encode($description),
             'tags' => $tags,
-            'sku' => $sku
+            'sku' => $sku,
+            'image' => $image,
 
         ]);
         return $this->index();

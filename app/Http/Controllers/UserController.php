@@ -7,39 +7,42 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\View\View;
 
-class AccountController extends Controller
+class UserController extends Controller
 {
-    /**
-     * Display the registration form.
-     */
-    public function create()
+    public function index(): View
     {
-        return view('create-account'); // Chỉ định view cho form đăng ký
+        $users = User::all();
+        return  view('user.index', compact('users'));
     }
 
-    /**
-     * Handle the registration request.
-     *
-     * @param  Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
+    public function create()
+    {
+        return view('user.create-account');
+    }
+
     public function store(Request $request)
     {
-        // Validate the incoming request data
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Create the user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password), // Hash the password
+            'password' => Hash::make($request->password),
         ]);
-        // Redirect to the intended location
-        return redirect()->route('create-account');
+
+        return $this->index();
+    }
+
+    public function delete($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+        return $this->index();
     }
 }

@@ -14,5 +14,6 @@ class Product extends Model
         'tags',
         'sku',
         'package',
+        'image'
     ];
 }

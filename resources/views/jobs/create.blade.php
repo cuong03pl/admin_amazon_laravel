@@ -16,13 +16,13 @@
             </h2>
         </x-slot>
 
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-[32px]">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-6">
 
             <form class="mt-[32px] grid grid-cols-1 gap-4" action="{{ route('jobs.store') }}" method="POST">
                 @csrf
                 <div class="">
-                    <div class="">
-                        <h3 for="user_id">Select User</h3>
+                    <div class="mb-3">
+                        <h3 class="font-bold">Select User</h3>
                         <select name="username" id="username" class="form-control">
                             @foreach($users as $user)
                             <option value="{{ $user->email }}">{{ $user->name }} - {{ $user->email }}</option>
@@ -30,16 +30,16 @@
                         </select>
 
                     </div>
-                    <div class="w-[50%]">
-                        <h3>Date</h3>
+                    <div class="w-[50%] mb-3">
+                        <h3 class="font-bold">Date</h3>
                         <input type="date" value="{{ now()->format('Y-m-d') }}" name="date" readonly>
                     </div>
-                    <div class="w-[50%] my-4">
-                        <h3>Package Name</h3>
+                    <div class="w-[50%] mb-3">
+                        <h3 class="font-bold">Package Name</h3>
                         <input class="w-full" type="text" name="package_name">
                     </div>
-                    <div class="w-full">
-                        <h3>Data</h3>
+                    <div class="w-full mb-3">
+                        <h3 class="font-bold">Data</h3>
                         <textarea class="w-full" name="data" id="data" rows="20"></textarea>
                     </div>
                     <button class="bg-[#2271b1] text-white h-[40px] px-[14px] rounded-[3px] mt-[32px]" type="submit">Publish</button>

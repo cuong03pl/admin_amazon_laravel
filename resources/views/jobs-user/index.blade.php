@@ -17,7 +17,7 @@
             </h2>
         </x-slot>
 
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-[32px]">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-6">
 
             <div class="flex flex-col my-6 rounded-2xl shadow-xl shadow-gray-200">
                 <div class="overflow-x-auto rounded-2xl">
@@ -41,10 +41,17 @@
                                 </div>
                                 <div class="bg-white divide-y divide-gray-200">
                                     @foreach($jobs as $job)
-                                    <div class="hover:bg-gray-100 grid grid-cols-12 w-full">
+                                    <div class="hover:bg-gray-100 grid grid-cols-12 w-full items-center">
                                         <div class="p-4 col-span-2 text-base font-medium text-gray-900  lg:p-5">{{$job->package_name}}</div>
                                         <div class="p-4 col-span-2 text-base font-medium text-gray-900  lg:p-5">{{$job->date}}</div>
-                                        <div class="p-4 col-span-2 text-base font-medium text-gray-900  lg:p-5">{{$job->date}}</div>
+                                        <div class="p-4 col-span-2">
+                                            @if($job->status == 1)
+                                            <div class=" text-white flex justify-center bg-red-700 font-medium rounded-lg text-sm px-5 py-2.5  ">Incomplete</div>
+                                            @else
+                                            <div class=" text-white flex justify-center bg-green-700 font-medium rounded-lg text-sm px-5 py-2.5  ">Complete</div>
+                                            @endif
+                                        </div>
+
                                         <div class="p-4 col-span-4 space-x-2  lg:p-5">
 
                                             <a href="{{ route('jobs-user.show', $job->id) }}" type="button" data-modal-toggle="product-modal" class="inline-flex items-center py-2 px-3 text-sm font-medium text-center text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 hover:text-gray-900 hover:scale-[1.02] transition-all">

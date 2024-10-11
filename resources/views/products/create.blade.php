@@ -25,7 +25,7 @@
             </h2>
         </x-slot>
 
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-[32px]">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8  py-6">
             @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
@@ -35,18 +35,31 @@
             <form class="mt-[32px] grid grid-cols-12 gap-4" action="{{ route('products.store') }}" method="POST">
                 @csrf
                 <div class="col-span-9">
-                    <div class="w-full">
+                    <div class="w-full mb-3">
+                        <h3 class="font-bold">SKU</h3>
                         <input class="w-full" type="text" name="sku" placeholder="SKU">
                     </div>
-                    <div class="w-full">
+                    <div class="w-full mb-3">
+                        <h3 class="font-bold">Product name</h3>
                         <input class="w-full" type="text" name="name" placeholder="Product name">
                     </div>
-                    <textarea name="description" id="description"></textarea>
+                    <div class="w-full mb-3">
+                        <h3 class="font-bold">Tag</h3>
+                        <input class="w-full" type="text" name="tags" placeholder="tags">
+                    </div>
+                    <div class="w-full mb-3">
+                        <h3 class="font-bold">Image</h3>
+                        <input class="w-full" type="text" name="image" placeholder="Image">
+                    </div>
+                    <div class="w-full mb-3">
+                        <h3 class="font-bold">Description</h3>
+                        <textarea name="description" id="description"></textarea>
+
+                    </div>
                     <button class="bg-[#2271b1] text-white h-[40px] px-[14px] rounded-[3px] mt-[32px]" type="submit">Publish</button>
                 </div>
                 <div class="col-span-3">
-                    <input type="text" name="tags" placeholder="tags">
-                </div>
+
             </form>
 
         </div>

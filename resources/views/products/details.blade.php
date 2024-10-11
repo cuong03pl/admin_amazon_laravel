@@ -20,11 +20,11 @@
                 {{ __('Details Products') }}
             </h2>
         </x-slot>
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-[32px]">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-6">
             <div class="grid grid-cols-3 gap-4">
                 <div class="col-span-1">
                     <div class="">
-                        <img src="https://site1.premiumdodo.com/wp-content/uploads/woocommerce-placeholder-600x600.png" alt="">
+                        <img class="w-full" src="{{$product->image}}" alt="">
                     </div>
                 </div>
                 <div class="col-span-2">

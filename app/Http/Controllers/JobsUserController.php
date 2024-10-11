@@ -17,31 +17,20 @@ class JobsUserController extends Controller
     public function index()
     {
         $jobs = Jobs::where('username', Auth::user()->email)->get();
-        // gán status = complete
-        // lấy ra tất cả products thuộc package đó 
-        // foreach để check description > 500 không nếu có 1 cái chưa thì status = uncomplete và break
+        foreach ($jobs as $job) {
+            $status = 2;
+            $package_name = $job->package_name;
+            $products = Product::where('package', $package_name)->get();
+            foreach ($products as $product) {
+                $description = $product->description;
+                if (strlen($description) < 500) {
+                    $status = 1;
+                    break;
+                }
+            }
+            $job->update(['status' => $status]);
+        }
         return view("jobs-user.index", compact("jobs"));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -53,10 +42,9 @@ class JobsUserController extends Controller
     public function show($id)
     {
         $job = Jobs::findOrFail($id);
-        $package_name = $job->package;
+        $package_name = $job->package_name;
 
-        $products = Product::where('package', $package_name)->get();
-        dd($products);
+        $products = Product::where('package', $package_name)->get()->toArray();
         // $data = $job->data;
 
         // $data = trim($data, "\n\"\"\"");
@@ -75,9 +63,7 @@ class JobsUserController extends Controller
         //         'description' => $description,
         //     ];
         // }
-        // return view("jobs-user.show", compact("productsArray"));
-
-
+        return view("jobs-user.show", compact("products", 'id'));
     }
 
     /**
@@ -89,7 +75,7 @@ class JobsUserController extends Controller
     public function edit($sku)
     {
         $product = Product::where('sku', $sku)->first();
-        return view('products.edit', compact("product"));
+        return view('jobs-user.edit', compact("product"));
     }
 
     /**
@@ -99,9 +85,29 @@ class JobsUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $id = $request->input('id');
+        $product = Product::findOrFail($id);
+        $request->validate([
+            'name' => 'required|string',
+            'sku' => 'required|string'
+        ]);
+
+        $description = $request->input('description');
+        $name = $request->input('name');
+        $tags = $request->input('tags');
+        $sku = $request->input('sku');
+        $image = $request->input('image');
+        $product->update([
+            'name' => $name,
+            'description' => json_encode($description),
+            'tags' => $tags,
+            'sku' => $sku,
+            'image' => $image
+
+        ]);
+        return $this->index();
     }
 
     /**
