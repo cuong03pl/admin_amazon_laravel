@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Jobs;
+use App\Models\Product;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class JobsController extends Controller
+{
+    public function index(): View
+    {
+        $jobs = Jobs::all();
+        return view('jobs.index', compact("jobs"));
+    }
+
+    public function create(): View
+    {
+        $users = User::all();
+        return  view('jobs.create', compact("users"));
+    }
+    public function store(Request $request)
+    {
+        $job = Jobs::create($request->all());
+
+        $package = $request->input('package_name');
+        $data = $request->input('data');
+
+        $data = trim($data, "\n\"\"\"");
+
+        $products = explode("\n", $data);
+        foreach ($products as $product) {
+            list($sku, $name, $description) = explode('|', $product);
+            if (Product::where('sku', $sku)->exists()) {
+                continue;
+            }
+            try {
+                Product::create([
+                    'sku' => $sku,
+                    'name' => $name,
+                    'description' => $description,
+                    'package' => $package
+                ]);
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
+        }
+
+        return $this->index();
+    }
+
+
+    public function edit($id): View
+    {
+        $job = Jobs::findOrFail($id);
+        return view("jobs.edit", compact("job"));
+    }
+
+    public function update(Request $request)
+    {
+        $id = $request->input('id');
+        $job = Jobs::findOrFail($id);
+
+        $job->update($request->all());
+
+        return $this->index();
+    }
+    public function delete($id)
+    {
+        $job = Jobs::findOrFail($id);
+        $job->delete();
+        return $this->index();
+    }
+    public function detail($id)
+    {
+
+        return $this->index();
+    }
+}
