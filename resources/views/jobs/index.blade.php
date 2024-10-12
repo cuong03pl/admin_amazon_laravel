@@ -18,7 +18,64 @@
         </x-slot>
 
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8  py-6">
-            <a href="{{ route('jobs.create') }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Create jobs</a>
+            <div class="w-full">
+                <div class="flex flex-col">
+                    <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
+                        <form action="{{route('jobs.index')}}" method="GET" class="">
+                            <!-- search -->
+                            <div class="relative mb-10 w-full flex  items-center justify-between rounded-md">
+                                <svg class="absolute left-2 block h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8" class=""></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65" class=""></line>
+                                </svg>
+                                <input type="name" name="package_name" value="{{request('package_name')}}" class="h-12 w-full cursor-text rounded-md border border-gray-100 bg-gray-100 py-4 pr-40 pl-12 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" placeholder="Package name" />
+                            </div>
+                            <!-- filter -->
+                            <div class="grid grid-cols-4 gap-6 ">
+                                <!-- field user -->
+                                <div class=" col-span-1 ">
+                                    <label for="user" class="text-sm font-medium text-stone-600">User</label>
+                                    <select id="user" name="user" class="mt-2 block w-full rounded-md border border-gray-100 bg-gray-100 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <option value="">Select All</option>
+                                        @foreach($users as $user)
+                                        <option {{$user->email == request('user') ? "selected" : ""}} value="{{ $user->email }}">{{ $user->name }} - {{ $user->email }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <!-- user -->
+                                <div class=" col-span-1">
+                                    <label for="status" class="text-sm font-medium text-stone-600">Status</label>
+
+                                    <select id="status" name="status" class="mt-2 block w-full cursor-pointer rounded-md border border-gray-100 bg-gray-100 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                        <option value="">Select All</option>
+                                        <option {{ request('status') == 2 ? 'selected' : '' }} value="2">Completed</option>
+                                        <option {{ request('status') == 1 ? 'selected' : '' }} value="1">Incomplete</option>
+                                    </select>
+                                </div>
+                                <!-- date from -->
+                                <div class=" col-span-1">
+                                    <label for="date" class="text-sm font-medium text-stone-600">Date from:</label>
+                                    <input type="date" value="{{ request('date_from') }}" name="date_from" id="date" class="mt-2 block w-full cursor-pointer rounded-md border border-gray-100 bg-gray-100 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+                                </div>
+                                <!-- date to -->
+                                <div class=" col-span-1">
+                                    <label for="date" class="text-sm font-medium text-stone-600">Date to:</label>
+                                    <input type="date" value="{{ request('date_to') }}" name="date_to" id="date" class="mt-2 block w-full cursor-pointer rounded-md border border-gray-100 bg-gray-100 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+                                </div>
+                            </div>
+                            <!-- button -->
+                            <div class="mt-6 grid grid-cols-2 justify-end space-x-4 md:flex">
+                                <a href="{{route('jobs.index')}}" class="rounded-lg text-center bg-gray-200 px-8 py-2 font-medium text-gray-700 outline-none hover:opacity-80 focus:ring">Reset</a>
+                                <button type="submit" class="rounded-lg bg-blue-600 px-8 py-2 font-medium text-white outline-none hover:opacity-80 focus:ring">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6">
+
+                <a href="{{ route('jobs.create') }}" class="text-white px-3 py-3 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm  dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Create jobs</a>
+            </div>
             <div class="flex flex-col my-6 rounded-2xl shadow-xl shadow-gray-200">
                 <div class="overflow-x-auto rounded-2xl">
                     <div class="inline-block min-w-full align-middle">
@@ -75,6 +132,10 @@
                                                 </svg>
                                                 Delete
                                             </button>
+
+                                            <a href="{{ route('jobs.export', $job->id) }}" class=" inline-flex items-center py-2 px-1 text-sm font-medium text-center text-white bg-gradient-to-br from-red-400 to-red-600 rounded-lg shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform">
+                                                Export
+                                            </a>
                                         </div>
                                     </div>
                                     @endforeach

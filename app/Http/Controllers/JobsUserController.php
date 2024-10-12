@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Jobs;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,9 +15,31 @@ class JobsUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $jobs = Jobs::where('username', Auth::user()->email)->get();
+        $query = Jobs::query();
+        $query->where('username', Auth::user()->email);
+        if ($request->filled('package_name')) {
+            $query->where('package_name', 'like', '%' . $request->package_name . '%');
+        }
+
+        if ($request->filled('user')) {
+            $query->where('username', $request->user);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        $jobs = $query->get();
         foreach ($jobs as $job) {
             $status = 2;
             $package_name = $job->package_name;
@@ -94,7 +117,7 @@ class JobsUserController extends Controller
         $tags = $request->input('tags');
         $product->update([
             'name' => $name,
-            'description' => json_encode($description),
+            'description' => json_encode($description, JSON_UNESCAPED_UNICODE),
             'tags' => $tags,
         ]);
         $isPreview = true;

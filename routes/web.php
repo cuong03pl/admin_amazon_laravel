@@ -53,9 +53,11 @@ Route::post('/jobs/store', [JobsController::class, 'store'])->name('jobs.store')
 Route::get('/jobs/{id}/edit', [JobsController::class, 'edit'])->name('jobs.edit');
 Route::put('/jobs/update', [JobsController::class, 'update'])->name('jobs.update');
 Route::delete('/jobs/{id}/delete', [JobsController::class, 'delete'])->name('jobs.delete');
+Route::get('/jobs/{id}/export', [JobsController::class, 'export'])->name('jobs.export');
 
 Route::get('/jobs-user/index', [JobsUserController::class, 'index'])->name('jobs-user.index');
 Route::get('/jobs-user/{id}/show', [JobsUserController::class, 'show'])->name('jobs-user.show');
 Route::get('/jobs-user/{id}/edit', [JobsUserController::class, 'edit'])->name('jobs-user.edit');
 Route::post('/jobs-user/update', [JobsUserController::class, 'update'])->name('jobs-user.update');
+
 require __DIR__ . '/auth.php';

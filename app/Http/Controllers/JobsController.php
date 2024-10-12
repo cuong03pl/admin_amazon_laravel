@@ -6,27 +6,52 @@ use App\Models\Jobs;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class JobsController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $jobs = Jobs::all();
+        $query = Jobs::query();
+
+        if ($request->filled('package_name')) {
+            $query->where('package_name', 'like', '%' . $request->package_name . '%');
+        }
+
+        if ($request->filled('user')) {
+            $query->where('username', $request->user);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        $jobs = $query->get();
+        $users = User::all();
+
         foreach ($jobs as $job) {
             $status = 2;
             $package_name = $job->package_name;
             $products = Product::where('package', $package_name)->get();
             foreach ($products as $product) {
-                $description = $product->description;
-                if (strlen($description) < 500) {
+                if (strlen($product->description) < 500) {
                     $status = 1;
                     break;
                 }
             }
             $job->update(['status' => $status]);
         }
-        return view('jobs.index', compact("jobs"));
+
+        return view('jobs.index', compact('jobs', 'users'));
     }
 
     public function create(): View
@@ -61,7 +86,7 @@ class JobsController extends Controller
             }
         }
         $job = Jobs::create($request->all());
-        return $this->index();
+        return redirect()->route('jobs.index');
     }
 
 
@@ -80,17 +105,26 @@ class JobsController extends Controller
 
         $job->update($request->all());
 
-        return $this->index();
+        return redirect()->route('jobs.index');
     }
     public function delete($id)
     {
         $job = Jobs::findOrFail($id);
         $job->delete();
-        return $this->index();
+        return redirect()->route('jobs.index');
     }
     public function detail($id)
     {
 
-        return $this->index();
+        return redirect()->route('jobs.index');
+    }
+    public function export($id)
+    {
+        $job = Jobs::findOrFail($id)->toArray();
+        $products = Product::where("package", $job['package_name'])->select('product_id', "name", "slug", "description", 'image')->get()->toArray();
+        $jsonContent = json_encode($products, JSON_PRETTY_PRINT);
+        $filePath = 'exports/package_' . $job['package_name'] . '.json';
+        Storage::put($filePath, $jsonContent);
+        return redirect()->route('jobs.index');
     }
 }
