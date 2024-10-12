@@ -34,10 +34,6 @@
                         <input class="w-full" type="hidden" name="id" value="{{$product->id}}">
                     </div>
                     <div class="w-full mb-3">
-                        <h3 class="font-bold">SKU</h3>
-                        <input class="w-full" type="text" name="sku" value="{{$product->sku}}" placeholder="SKU">
-                    </div>
-                    <div class="w-full mb-3">
                         <h3 class="font-bold">Product name</h3>
                         <input class="w-full" type="text" name="name" value="{{$product->name}}" placeholder="Product name">
                     </div>
@@ -45,18 +41,15 @@
                         <h3 class="font-bold">Tag</h3>
                         <input class="w-full" type="text" value="{{$product->tags}}" name="tags" placeholder="Tags">
                     </div>
-
-                    <div class="w-full mb-3">
-                        <h3 class="font-bold">Image</h3>
-                        <input class="w-full" type="text" value="{{$product->image}}" name="image" placeholder="Image">
-                    </div>
                     <div class="w-full mb-3">
                         <h3 class="font-bold">Description</h3>
                         <textarea name="description" id="description">{{json_decode($product->description) }}</textarea>
                     </div>
                     <button class="bg-[#2271b1] text-white h-[40px] px-[14px] rounded-[3px] mt-[32px]" type="submit">Publish</button>
+
                 </div>
                 <div class="col-span-6">
+                    <div class="font-bold text-[24px]">Original data</div>
                     <div class="grid grid-cols-3 gap-4 mb-3">
                         <div class="col-span-1">
                             <div class="">
@@ -66,23 +59,35 @@
                         <div class="col-span-2">
                             <div class="text-[32px]">{{$product->name}}</div>
                             <div class="flex items-center gap-2">
-                                <span>Category: </span>
-                                <div class="">
-                                    Uncategorized
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span>Tag: </span>
-                                <div class="">
-                                    {{$product->tags}}
-                                </div>
+                                <span>Slug: </span>
+                                <div id="preview-product-id">{{$product->slug}}</div>
                             </div>
                         </div>
                     </div>
-                    <div class="">{!! json_decode($product->description) !!}</div>
                 </div>
             </form>
-
+            <div class="mt-[48px]">
+                <div class="font-bold text-[30px]">Preview Data</div>
+                <div class="grid grid-cols-3 gap-4 mb-3">
+                    <div class="col-span-1">
+                        <div class="">
+                            <img src="{{$product->image}}" alt="">
+                        </div>
+                    </div>
+                    <div class="col-span-2">
+                        <div class="text-[32px]">{{$product->name}}</div>
+                        <div class="flex items-center gap-2">
+                            <span>Slug: </span>
+                            <div id="preview-product-id">{{$product->slug}}</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span>Tag: </span>
+                            <div id="preview-product-id">{{$product->tags}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="preview-description">{!! json_decode($product->description) !!}</div>
+            </div>
         </div>
     </x-app-layout>
 </body>

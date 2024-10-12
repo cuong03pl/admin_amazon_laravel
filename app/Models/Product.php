@@ -12,8 +12,9 @@ class Product extends Model
         'name',
         'description',
         'tags',
-        'sku',
+        'product_id',
         'package',
-        'image'
+        'image',
+        'slug'
     ];
 }

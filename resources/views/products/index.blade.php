@@ -43,7 +43,7 @@
                                             Tags
                                         </div>
                                         <div scope="col" class="p-4  col-span-1 text-xs font-medium text-left text-gray-500 uppercase lg:p-5">
-                                            SKU
+                                            product_id
                                         </div>
                                         <div scope="col" class="p-4  col-span-2 text-xs font-medium text-left text-gray-500 uppercase lg:p-5">
                                             Package
@@ -61,7 +61,7 @@
                                         </div>
                                         <!-- <div class="p-4 col-span-5 text-base font-medium text-gray-900  lg:p-5">{{$product->description}}</div> -->
                                         <div class="p-4 col-span-2 text-base font-medium text-gray-900  lg:p-5">{{$product->tags}}</div>
-                                        <div class="p-4 col-span-1 text-base font-medium text-gray-900  lg:p-5">{{$product->sku}}</div>
+                                        <div class="p-4 col-span-1 text-base font-medium text-gray-900  lg:p-5">{{$product->product_id}}</div>
                                         <div class="p-4 col-span-2 text-base font-medium text-gray-900  lg:p-5">{{$product->package}}</div>
                                         <div class="flex items-center p-4 col-span-3 space-x-2  lg:p-5">
                                             <a href="{{ route('products.detail', $product->id) }}" type="button" data-modal-toggle="product-modal" class="flex items-center h-[40px] py-2 px-3 text-sm font-medium text-center text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 hover:text-gray-900 hover:scale-[1.02] transition-all">

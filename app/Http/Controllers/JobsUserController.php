@@ -54,11 +54,11 @@ class JobsUserController extends Controller
         // $productsArray = [];
 
         // foreach ($products as $product) {
-        //     list($sku, $name, $description) = explode('|', $product);
+        //     list($product_id, $name, $description) = explode('|', $product);
 
         //     // Thêm mỗi sản phẩm vào mảng dưới dạng một mảng liên kết
         //     $productsArray[] = [
-        //         'sku' => $sku,
+        //         'product_id' => $product_id,
         //         'name' => $name,
         //         'description' => $description,
         //     ];
@@ -72,9 +72,9 @@ class JobsUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($sku)
+    public function edit($product_id)
     {
-        $product = Product::where('sku', $sku)->first();
+        $product = Product::where('product_id', $product_id)->first();
         return view('jobs-user.edit', compact("product"));
     }
 
@@ -89,25 +89,16 @@ class JobsUserController extends Controller
     {
         $id = $request->input('id');
         $product = Product::findOrFail($id);
-        $request->validate([
-            'name' => 'required|string',
-            'sku' => 'required|string'
-        ]);
-
         $description = $request->input('description');
         $name = $request->input('name');
         $tags = $request->input('tags');
-        $sku = $request->input('sku');
-        $image = $request->input('image');
         $product->update([
             'name' => $name,
             'description' => json_encode($description),
             'tags' => $tags,
-            'sku' => $sku,
-            'image' => $image
-
         ]);
-        return $this->index();
+        $isPreview = true;
+        return view('jobs-user.edit', compact("product", 'isPreview'));
     }
 
     /**

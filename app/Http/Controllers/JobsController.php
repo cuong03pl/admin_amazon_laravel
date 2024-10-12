@@ -43,18 +43,18 @@ class JobsController extends Controller
 
         $products = explode("\n", $data);
         foreach ($products as $product) {
-            list($sku, $name, $description, $image) = explode('|', $product);
-            // dd($sku, $name, $description, $image);
-            if (Product::where('sku', $sku)->exists()) {
+            list($product_id, $name, $slug, $description, $image) = explode('|', $product);
+            if (Product::where('product_id', $product_id)->exists()) {
                 continue;
             }
             try {
                 Product::create([
-                    'sku' => $sku,
+                    'product_id' => $product_id,
                     'name' => $name,
                     'description' => $description,
                     'package' => $package,
                     'image' => $image,
+                    'slug' => $slug,
                 ]);
             } catch (\Exception $e) {
                 dd($e->getMessage());

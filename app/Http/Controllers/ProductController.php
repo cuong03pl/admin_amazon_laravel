@@ -29,22 +29,16 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'description' => 'required|string',
             'name' => 'required|string',
-            'sku' => 'required|string'
+            'product_id' => 'required|string'
         ]);
 
-        $description = $request->input('description');
+
         $name = $request->input('name');
-        $tags = $request->input('tags');
-        $sku = $request->input('sku');
-        $image = $request->input('image');
+        $product_id = $request->input('product_id');
         Product::create([
             'name' => $name,
-            'description' => json_encode($description),
-            'tags' => $tags,
-            'sku' => $sku,
-            'image' => $image,
+            'product_id' => $product_id,
         ]);
 
         return $this->index();
@@ -60,23 +54,15 @@ class ProductController extends Controller
     {
         $id = $request->input('id');
         $product = Product::findOrFail($id);
-        $request->validate([
-            'description' => 'required|string',
-            'name' => 'required|string',
-            'sku' => 'required|string'
-        ]);
 
-        $description = $request->input('description');
+
         $name = $request->input('name');
         $tags = $request->input('tags');
-        $sku = $request->input('sku');
-        $image = $request->input('image');
+        $description = $request->input('description');
         $product->update([
             'name' => $name,
             'description' => json_encode($description),
             'tags' => $tags,
-            'sku' => $sku,
-            'image' => $image,
 
         ]);
         return $this->index();

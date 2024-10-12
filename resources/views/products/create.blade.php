@@ -36,8 +36,8 @@
                 @csrf
                 <div class="col-span-9">
                     <div class="w-full mb-3">
-                        <h3 class="font-bold">SKU</h3>
-                        <input class="w-full" type="text" name="sku" placeholder="SKU">
+                        <h3 class="font-bold">Product Id</h3>
+                        <input class="w-full" type="text" name="product_id" placeholder="product_id">
                     </div>
                     <div class="w-full mb-3">
                         <h3 class="font-bold">Product name</h3>
@@ -50,6 +50,10 @@
                     <div class="w-full mb-3">
                         <h3 class="font-bold">Image</h3>
                         <input class="w-full" type="text" name="image" placeholder="Image">
+                    </div>
+                    <div class="w-full mb-3">
+                        <h3 class="font-bold">Slug</h3>
+                        <input class="w-full" type="text" name="slug" placeholder="Slug">
                     </div>
                     <div class="w-full mb-3">
                         <h3 class="font-bold">Description</h3>
