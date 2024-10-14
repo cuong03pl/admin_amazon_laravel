@@ -20,29 +20,38 @@ class RolesAndPermissionsSeeder extends Seeder
     {
 
         // permission products
-        Permission::create(['name' => 'edit products']);
-        Permission::create(['name' => 'delete products']);
-        Permission::create(['name' => 'create products']);
+        Permission::firstOrCreate(['name' => 'edit products']);
+        Permission::firstOrCreate(['name' => 'delete products']);
+        Permission::firstOrCreate(['name' => 'create products']);
 
         // permission users
-        Permission::create(['name' => 'create users']);
-        Permission::create(['name' => 'delete users']);
+        Permission::firstOrCreate(['name' => 'create users']);
+        Permission::firstOrCreate(['name' => 'delete users']);
 
         // permission jobs
-        Permission::create(['name' => 'create jobs']);
-        Permission::create(['name' => 'delete jobs']);
-        Permission::create(['name' => 'edit jobs']);
+        Permission::firstOrCreate(['name' => 'create jobs']);
+        Permission::firstOrCreate(['name' => 'delete jobs']);
+        Permission::firstOrCreate(['name' => 'edit jobs']);
 
-        $roleWrite = Role::create(['name' => 'writer']);
+        $roleWrite = Role::firstOrCreate(['name' => 'writer']);
         $roleWrite->givePermissionTo('edit products');
 
-        $roleSuperAdmin = Role::create(['name' => 'super-admin']);
+        $roleMod = Role::firstOrCreate(['name' => 'mod']);
 
-        $user = User::factory()->create([
-            'name' => "admin",
-            'email' => 'admin@gmail.com',
+        $roleSuperAdmin = Role::firstOrCreate(['name' => 'super-admin']);
+
+        // $user = User::factory()->create([
+        //     'name' => "admin",
+        //     'email' => 'admin@gmail.com',
+        //     'password' => Hash::make("123456"),
+        // ]);
+        // $user->assignRole($roleSuperAdmin);
+
+        $user2 = User::factory()->create([
+            'name' => "cuong1",
+            'email' => 'cuong1@gmail.com',
             'password' => Hash::make("123456"),
         ]);
-        $user->assignRole($roleSuperAdmin);
+        $user2->assignRole($roleWrite);
     }
 }
