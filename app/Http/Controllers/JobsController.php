@@ -105,13 +105,52 @@ class JobsController extends Controller
 
         $job->update($request->all());
 
+        $package = $request->input('package_name');
+        $data = $request->input('data');
+
+        $data = trim($data, "\n\"\"\"");
+        $products = explode("\n", $data);
+
+        foreach ($products as $product) {
+            list($product_id, $name, $slug, $description, $image) = explode('|', $product);
+
+            $existingProduct = Product::where('product_id', $product_id)->first();
+
+            if ($existingProduct) {
+                try {
+                    $existingProduct->update([
+                        'name' => $name,
+                        'description' => $description,
+                        'package' => $package,
+                        'image' => $image,
+                        'slug' => $slug,
+                    ]);
+                } catch (\Exception $e) {
+                    dd($e->getMessage());
+                }
+            } else {
+                try {
+                    Product::create([
+                        'product_id' => $product_id,
+                        'name' => $name,
+                        'description' => $description,
+                        'package' => $package,
+                        'image' => $image,
+                        'slug' => $slug,
+                    ]);
+                } catch (\Exception $e) {
+                    dd($e->getMessage());
+                }
+            }
+        }
+
         return redirect()->route('jobs.index');
     }
+
     public function delete($id)
     {
         $job = Jobs::findOrFail($id);
         $job->delete();
-        return redirect()->route('jobs.index');
     }
     public function detail($id)
     {
